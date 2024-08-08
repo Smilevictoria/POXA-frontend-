@@ -4,6 +4,19 @@ import React from 'react';
 
 let TABLE_KEY = 0;
 
+window.to_html_content = function(data) {
+	// 將字串按照換行符號分割成數組
+  const lines = data['content'].split('\n');
+
+  const elements = lines.map((line, index) => (
+    <React.Fragment key={index}>
+      <span dangerouslySetInnerHTML={{ __html: line }} />
+    </React.Fragment>
+  ));
+
+  return <div>{elements}</div>; // 將結果包裝在 <div> 元素中
+}
+
 window.to_text = function(data) {
 	// 將字串按照換行符號分割成數組
   const lines = data['content'].split('\n');
