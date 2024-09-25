@@ -7,7 +7,7 @@ const ChatHeader = ({ onMinimize, onFullScreen }) => {
   return (
     <div className={styles.container}>
       <div className={styles.left}>
-        <span className={styles.logo}>News-Bot</span>
+        <span className={styles.logo}>POXAGPT</span>
       </div>
       <div className={styles.right}>
         <button onClick={onFullScreen} className={styles.button}>
