@@ -49,8 +49,8 @@ const Message = ({ message, onSetIntent }) => {
                   key={index}
                   className={`${index === lastClickedIndex ? styles.button_click : styles.button}`}
                   onClick={() => {
-                    onSetIntent(button.content);
-                    handleButtonClick(index);
+                    onSetIntent(button.content); // 處理 button 的資料流
+                    handleButtonClick(index); // 處理 button 的樣式
                   }}>
                   {button.content}
                 </button>

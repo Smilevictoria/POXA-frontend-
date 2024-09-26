@@ -45,7 +45,7 @@ function ChatApp(){
 
     setMessages(prevMessages => [
       ...prevMessages,
-      { from: 'user', text: newMessage },  // 新訊息
+      { from: 'user', text: `[${intent}] ${newMessage}` },  // 新訊息
       { from: 'system', text: '等待中...' } // 告知等待中
     ]);
 
@@ -54,10 +54,10 @@ function ChatApp(){
       const res = response.data.response;
       console.log(`回覆: ${res}`);
   
-      // 异步响应后移除等待消息，并添加新的响应消息
+      // 刪除等待中的訊息，並加上新的回覆
       setMessages(prevMessages => [
         ...prevMessages.slice(0, -1),  // 移除「等待中」
-        ...deal_response(res)  // 處理並加上回覆
+        ...deal_response(res)  // 
       ]);
     } catch (error) {
       console.error('Error:', error);
