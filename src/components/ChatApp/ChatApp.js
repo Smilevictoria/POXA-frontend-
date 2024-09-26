@@ -11,8 +11,8 @@ import config from '../../config';
 import {covert_to_html, count_continuous_button, covert_to_gpt_entity} from './Convert';
 
 function ChatApp(){
-  const [chatOpen, setChatOpen] = useState(false);
-  const [isFullScreen, setIsFullScreen] = useState(false);
+  const [chatOpen, setChatOpen] = useState(true);
+  const [isFullScreen, setIsFullScreen] = useState(true);
 
   const toggleChat = () => {
     if(!chatOpen) setIsFullScreen(false);
@@ -43,38 +43,22 @@ function ChatApp(){
 
   const addMessage = async (newMessage) => {
 
-    const newMessageObj = {
-      from: 'user',
-      text: newMessage
-    }
-    setMessages([...messages, newMessageObj]);
-    
-
-    setMessages(prevMessages => {
-      const newMessages = [...prevMessages, {
-        "from": "system",
-        "text": "等待中..."
-      }]; // 添加新的消息對象
-      return newMessages;
-    });
+    setMessages(prevMessages => [
+      ...prevMessages,
+      { from: 'user', text: newMessage },  // 新訊息
+      { from: 'system', text: '等待中...' } // 告知等待中
+    ]);
 
     try {
-      const response = await axios.post(config.apiChat, {
-        user: newMessage
-      });
-      
+      const response = await axios.post(config.apiChat, { user: newMessage });
       const res = response.data.response;
       console.log(`回覆: ${res}`);
-      // deal_response(res);
-
-      setMessages(prevMessages => {
-        const newMessages = prevMessages.slice(0, -1); // 移除最後一個元素
-        return newMessages;
-      });
-
-      setMessages(prevMessages => ([
-        ...prevMessages, ...deal_response(res)
-      ]));
+  
+      // 异步响应后移除等待消息，并添加新的响应消息
+      setMessages(prevMessages => [
+        ...prevMessages.slice(0, -1),  // 移除「等待中」
+        ...deal_response(res)  // 處理並加上回覆
+      ]);
     } catch (error) {
       console.error('Error:', error);
     }
