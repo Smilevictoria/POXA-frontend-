@@ -45,7 +45,7 @@ function ChatApp(){
 
     setMessages(prevMessages => [
       ...prevMessages,
-      { from: 'user', text: `[${intent}] ${newMessage}` },  // 新訊息
+      { from: 'user', text: newMessage },  // 新訊息
       { from: 'system', text: '等待中...' } // 告知等待中
     ]);
 
