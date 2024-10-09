@@ -3,37 +3,34 @@ import styles from './ChatInput.module.css';
 
 const ChatInput = ({onSendMessage}) => {
   const [message, setMessage] = useState('');
+  const [isComposing, setIsComposing] = useState(false); // 新增状态来跟踪输入法状态
+
+  const handleCompositionStart = () => {
+    setIsComposing(true); // 進入輸入法的選字狀態
+  };
+
+  const handleCompositionEnd = () => {
+    setIsComposing(false); // 退出輸入法的選字狀態
+  };
 
   const handleMessageChange = (event) => {
+    // console.log(`進來改: ${event.target.value}`)
     setMessage(event.target.value);
   };
 
   const handleSendMessage = () => {
-    // sending message to your backend
-    console.log(`有進來: ${message}`);
     if (message.trim() !== '') {
-      console.log("執行");
-      onSendMessage(message);
-      setMessage(''); // 清空輸入欄位
+      onSendMessage(message);  // 发送消息
+      setMessage('');  // 清空输入框
     }
   };
 
   // 按下 enter 要呼叫 START
-  const handleKeyPress = (event) => {
-    console.log("偵測到按按鍵");
-    if (event.key === 'Enter') {
-      console.log("是按 enter");
+  const handleKeyDown = (event) => {
+    if (event.key === 'Enter' && !isComposing) {
       handleSendMessage();
     }
   };
-
-  useEffect(() => {
-    window.addEventListener('keydown', handleKeyPress);
-
-    return () => {
-      window.removeEventListener('keydown', handleKeyPress);
-    };
-  }, []);
   // 按下 enter 要呼叫 END
 
   return (
@@ -42,6 +39,9 @@ const ChatInput = ({onSendMessage}) => {
         type="text"
         value={message}
         onChange={handleMessageChange}
+        onKeyDown={handleKeyDown}
+        onCompositionStart={handleCompositionStart} // 開始輸入法的選字狀態
+        onCompositionEnd={handleCompositionEnd} // 結束輸入法的選字狀態
         placeholder="Type something..."
         className={styles.input}
       />
