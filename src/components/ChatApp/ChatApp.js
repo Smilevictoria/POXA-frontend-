@@ -41,6 +41,7 @@ function ChatApp(){
     console.log(messages);
   }, [messages]);
 
+  const timeoutRef = useRef(null);
   const addMessage = async (newMessage) => {
 
     setMessages(prevMessages => [
@@ -49,10 +50,30 @@ function ChatApp(){
       { from: 'system', text: '等待中...' } // 告知等待中
     ]);
 
+    // 設置 timeout 計時器(20s)
+    timeoutRef.current = setTimeout(() => {
+      setMessages((prevMessages) => [
+        ...prevMessages.slice(0, -1),
+        {
+          from: 'system', 
+          text: ( 
+          <>
+            系統無法回答您的問題，請見諒!
+            <br />
+            您可以換個問題或是重新發問，謝謝!!
+          </>
+          ),
+        },
+      ]);
+    }, 30000);
+
     try {
       const response = await axios.post(config.apiChat, { user: newMessage });
       const res = response.data.response;
       console.log(`回覆: ${res}`);
+
+      // 清除 timeout (已收到回覆)
+      clearTimeout(timeoutRef.current);
   
       // 刪除等待中的訊息，並加上新的回覆
       setMessages(prevMessages => [
@@ -63,6 +84,13 @@ function ChatApp(){
       console.error('Error:', error);
     }
   };
+
+  // 處理 timeout 計時器
+  useEffect(() => {
+    return () => {
+      clearTimeout(timeoutRef.current);
+    };
+  }, []);
 
   // 處理功能 START
   const [intent, setIntent] = useState("");
