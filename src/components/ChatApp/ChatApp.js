@@ -47,7 +47,7 @@ function ChatApp(){
     setMessages(prevMessages => [
       ...prevMessages,
       { from: 'user', text: newMessage },  // 新訊息
-      { from: 'system', text: '等待中...' } // 告知等待中
+      { from: 'system', text: '等待中...(系統會在20秒內進行回覆)' } // 告知等待中
     ]);
 
     // 設置 timeout 計時器(20s)
@@ -65,7 +65,7 @@ function ChatApp(){
           ),
         },
       ]);
-    }, 30000);
+    }, 20000);
 
     try {
       const response = await axios.post(config.apiChat, { user: newMessage });
