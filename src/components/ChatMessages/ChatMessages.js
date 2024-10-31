@@ -3,17 +3,17 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faRobot, faUser } from '@fortawesome/free-solid-svg-icons';
 import styles from './ChatMessages.module.css';
 
-const ChatMessages = ({ messages, onSetIntent }) => {
+const ChatMessages = ({ messages, onSetIntent, onSetFlow }) => {
   return (
     <div className={styles.container}>
       {messages.map((message, messageIndex) => (
-        <Message key={messageIndex} message={message} onSetIntent={onSetIntent}/>
+        <Message key={messageIndex} message={message} onSetIntent={onSetIntent} onSetFlow={onSetFlow}/>
       ))}
     </div>
   );
 };
 
-const Message = ({ message, onSetIntent }) => {
+const Message = ({ message, onSetIntent, onSetFlow }) => {
   const [lastClickedIndex, setLastClickedIndex] = useState(null);
 
   const handleButtonClick = (index) => {
@@ -49,6 +49,7 @@ const Message = ({ message, onSetIntent }) => {
                   key={index}
                   className={`${index === lastClickedIndex ? styles.button_click : styles.button}`}
                   onClick={() => {
+                    onSetFlow(button.content);
                     onSetIntent(button.content); // 處理 button 的資料流
                     handleButtonClick(index); // 處理 button 的樣式
                   }}>

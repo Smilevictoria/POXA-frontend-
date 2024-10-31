@@ -13,6 +13,12 @@ import {covert_to_html, count_continuous_button, covert_to_gpt_entity} from './C
 function ChatApp(){
   const [chatOpen, setChatOpen] = useState(true);
   const [isFullScreen, setIsFullScreen] = useState(true);
+  const [flow, setFlow] = useState(null);
+
+  useEffect(() => {
+    console.log('flow 值改變:', flow);
+  }, [flow]);
+
 
   const toggleChat = () => {
     if(!chatOpen) setIsFullScreen(false);
@@ -68,7 +74,7 @@ function ChatApp(){
     }, 20000);
 
     try {
-      const response = await axios.post(config.apiChat, { user: newMessage });
+      const response = await axios.post(config.apiChat, { user: newMessage, flow: flow });
       const res = response.data.response;
       console.log(`回覆: ${res}`);
 
@@ -135,7 +141,7 @@ function ChatApp(){
         try {
           if(res[i]["ui_type"]=='button'){
             // submitButton = true;
-            let end = count_continuous_button(res, i);
+            let end = count_continuous_button(res, i, setFlow);
             let button_data = [];
             for(let j=i; j<=end; j++){
               button_data.push(res[j]["data"][res[j]["ui_type"]])
@@ -149,7 +155,7 @@ function ChatApp(){
             });
           }
           else{
-            html = covert_to_html(`to_${res[i]["ui_type"]}`, res[i]["data"][res[i]["ui_type"]]);
+            html = covert_to_html(`to_${res[i]["ui_type"]}`, res[i]["data"][res[i]["ui_type"]], setFlow);
             
             // 在發送成功後更新本地狀態
             tempMessages.push({
@@ -180,7 +186,7 @@ function ChatApp(){
       {chatOpen && (
         <>
           <ChatHeader onMinimize={toggleChat} onFullScreen={toggleFullScreen} />
-          <ChatMessages messages={messages} onSetIntent={setIntent} />
+          <ChatMessages messages={messages} onSetIntent={setIntent} onSetFlow={setFlow}/>
           <ChatInput onSendMessage={addMessage} />
         </>
       )}

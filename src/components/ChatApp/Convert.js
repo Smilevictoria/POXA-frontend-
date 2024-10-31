@@ -93,8 +93,8 @@ window.to_table = function(data){
 }
 
 window.to_button = function(data) {
-    console.log("button 的資料")
-    console.log(data);
+  console.log("button 的資料")
+  console.log(data);
 	return (
 		<button onClick={data['function']}>
 			{data['content']}
@@ -103,7 +103,8 @@ window.to_button = function(data) {
 }
 
 // 計算 button 連續到第幾個 index 即可
-export function count_continuous_button(res, start){
+export function count_continuous_button(res, start, setFlow){
+  setFlow(null);
 	for(let i=start; i<res.length; i++){
 		if(res[i]["ui_type"]=="button"){
 			continue;
