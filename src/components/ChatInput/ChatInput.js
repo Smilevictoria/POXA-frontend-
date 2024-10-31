@@ -10,7 +10,9 @@ const ChatInput = ({onSendMessage}) => {
   };
 
   const handleCompositionEnd = () => {
-    setIsComposing(false); // 退出輸入法的選字狀態
+    setTimeout(() => {
+      setIsComposing(false); // 延遲重置組字狀態
+    }, 0); // 退出輸入法的選字狀態
   };
 
   const handleMessageChange = (event) => {
@@ -27,7 +29,8 @@ const ChatInput = ({onSendMessage}) => {
 
   // 按下 enter 要呼叫 START
   const handleKeyDown = (event) => {
-    if (event.key === 'Enter' && !isComposing) {
+    if (event.key === 'Enter' && !isComposing && !event.isComposing) {
+      event.preventDefault();
       handleSendMessage();
     }
   };
