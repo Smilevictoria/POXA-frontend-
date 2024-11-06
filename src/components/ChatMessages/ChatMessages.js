@@ -1,19 +1,35 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faRobot, faUser } from '@fortawesome/free-solid-svg-icons';
 import styles from './ChatMessages.module.css';
 
 const ChatMessages = ({ messages, onSetIntent, onSetFlow }) => {
+  // 使用 ref 來獲取 messages 容器
+  const messagesEndRef = useRef(null);
+
+  // 每次 messages 更新時滾動到最下面
+  useEffect(() => {
+    if (messagesEndRef.current) {
+      messagesEndRef.current.scrollIntoView({ behavior: 'smooth' }); // 平滑滾動到底部
+    }
+  }, [messages]); // 當 messages 改變時觸發
+
   return (
     <div className={styles.container}>
       {messages.map((message, messageIndex) => (
-        <Message key={messageIndex} message={message} onSetIntent={onSetIntent} onSetFlow={onSetFlow}/>
+        <Message
+          key={messageIndex} 
+          message={message}
+          onSetIntent={onSetIntent} 
+          onSetFlow={onSetFlow}/>
       ))}
+      <div ref={messagesEndRef} />
     </div>
   );
 };
 
 const Message = ({ message, onSetIntent, onSetFlow }) => {
+
   const [lastClickedIndex, setLastClickedIndex] = useState(null);
 
   const handleButtonClick = (index) => {
@@ -43,28 +59,19 @@ const Message = ({ message, onSetIntent, onSetFlow }) => {
 
       {message.buttonData && (
         <div className={`${styles.text} ${styles.systemText}`}>
-          {Array.isArray(message.buttonData)
-            ? message.buttonData.map((button, index) => (
+          {message.buttonData.map((button, index) => (
                 <button
                   key={index}
                   className={`${index === lastClickedIndex ? styles.button_click : styles.button}`}
                   onClick={() => {
                     onSetFlow(button.content);
                     onSetIntent(button.content); // 處理 button 的資料流
-                    handleButtonClick(index); // 處理 button 的樣式
+                    // handleButtonClick(index); // 處理 button 的樣式
                   }}>
                   {button.content}
                 </button>
               ))
-            : (
-                <button
-                  className={styles.button_submit}
-                  onClick={() => {
-                    // onSendEntity();
-                  }}>
-                  Submit
-                </button>
-              )}
+            }
         </div>
       )}
     </div>
