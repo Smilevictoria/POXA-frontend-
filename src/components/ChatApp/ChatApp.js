@@ -50,8 +50,12 @@ function ChatApp(){
   const timeoutRef = useRef(null);
   const addMessage = async (newMessage) => {
 
+    let need_remove = messages.length > 0 && messages[messages.length - 1].buttonData;
+
     setMessages(prevMessages => [
-      ...prevMessages,
+      ...(
+        need_remove ? prevMessages.slice(0, -1) : prevMessages // 根據條件選擇是否移除最後一項
+      ),
       { from: 'user', text: newMessage },  // 新訊息
       { from: 'system', text: '等待中...(系統會在20秒內進行回覆)' } // 告知等待中
     ]);
@@ -101,12 +105,12 @@ function ChatApp(){
   // 處理功能 START
   const [intent, setIntent] = useState("");
   useEffect(() => {
-    if (isInitialMount.current) {
+    if (isInitialMount.current || intent=="") {
       isInitialMount.current = false;
     } else {
-      console.log('Updated intent:', intent);
       addMessage(intent);
     }
+    setIntent("");
   }, [intent]);
   // 處理功能 END
 
