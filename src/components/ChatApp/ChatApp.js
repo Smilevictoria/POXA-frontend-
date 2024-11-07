@@ -71,7 +71,7 @@ function ChatApp(){
           ),
         },
       ]);
-    }, 20000);
+    }, 25000);
 
     try {
       const response = await axios.post(config.apiChat, { user: newMessage, flow: flow });
