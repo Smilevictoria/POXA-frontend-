@@ -1,51 +1,14 @@
-# This is a basic workflow to help you get started with Actions
+name: Deploy to Render
 
-name: Deploy to VM
-
-# Controls when the workflow will run
 on:
-  # Triggers the workflow on push or pull request events but only for the "main" branch
   push:
     branches: [ "main" ]
 
-  # Allows you to run this workflow manually from the Actions tab
-  workflow_dispatch:
-
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "build"
-  build:
-    # The type of runner that the job will run on
+  deploy:
     runs-on: ubuntu-latest
 
-    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v4
-
-      - name: Set up OpenVPN
+      - name: Trigger Render Deploy Hook
         run: |
-          # Install OpenVPN
-          sudo apt-get update
-          sudo apt-get install -y openvpn
-  
-          # Create OpenVPN config file from GitHub secret
-          echo "$OPENVPN_CONFIG" > ~/soselab.ovpn
-          
-          # Connect to OpenVPN using the configuration file
-          sudo openvpn --config ~/soselab.ovpn &
-          
-          # Wait for VPN connection to establish
-          sleep 10
-          
-      # Runs a set of commands using the runners shell
-      - name: Deploy Application
-        run: |
-          ssh poxagpt@192.168.100.241 << 'EOF'
-          echo "soselab707" | sudo -S /home/poxagpt/deployFront.sh
-          EOF
-
-      - name: Disconnect OpenVPN
-        run: |
-          # Kill OpenVPN process to disconnect
-          sudo pkill openvpn
+          curl -X POST https://api.render.com/deploy/srv-ct1ma9d2ng1s73e7qfg0?key=KJB5iYjLcb0
