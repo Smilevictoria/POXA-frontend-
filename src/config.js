@@ -1,18 +1,10 @@
 const config = {
-<<<<<<< HEAD
 
-    //  apiGreeting: 'https://poxagpt_backend.soselab.tw/greeting',
-    //  apiChat: 'https://poxagpt_backend.soselab.tw/chat',
-    apiGreeting: 'http://127.0.0.1:5000/greeting',
-    apiChat: 'http://127.0.0.1:5000/chat',
-
-=======
     apiGreeting: 'https://poxagpt_backend.soselab.tw/greeting',
     apiChat: 'https://poxagpt_backend.soselab.tw/chat',
 
     // apiGreeting: 'http://127.0.0.1:5000/greeting',
     // apiChat: 'http://127.0.0.1:5000/chat',
->>>>>>> 6718d9e3a536a6a85afb65afb811ac15acc6692e
     // apiHistory: 'https://kmamiz-bot-gpt.soselab.tw/api/history',
     // apiUser: 'https://kmamiz-bot-gpt.soselab.tw/api/user',
     
@@ -20,10 +12,6 @@ const config = {
     // apiGreeting: 'https://poxa-backend.onrender.com/greeting',
     // apiChat: 'https://poxa-backend.onrender.com/chat',
 
-<<<<<<< HEAD
-=======
-
->>>>>>> 6718d9e3a536a6a85afb65afb811ac15acc6692e
     //Vercel
     // apiGreeting: 'https://poxa-backend.vercel.app/greeting',
     // apiChat: 'https://poxa-backend.vercel.app/chat',
